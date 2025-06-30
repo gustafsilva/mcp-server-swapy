@@ -36,6 +36,14 @@ export class SwapyApiService {
     return this.makeRequest<RootResponse>("/");
   }
 
+
+  async searchPeopleList(search: string): Promise<ListResponse<People> | null> {
+    const response = await this.makeRequest<ListResponse<People>>(
+      `/people/?search=${encodeURIComponent(search)}`
+    );
+    return response;
+  }
+
   async getPeopleList(page: number = 1): Promise<ListResponse<People> | null> {
     const response = await this.makeRequest<ListResponse<People>>(
       `/people/?page=${page}`
@@ -47,12 +55,28 @@ export class SwapyApiService {
     return this.makeRequest<People>(`/people/${id}`);
   }
 
+  async searchPlanetsList(
+    search: string
+  ): Promise<ListResponse<Planet> | null> {
+    return this.makeRequest<ListResponse<Planet>>(
+      `/planets/?search=${encodeURIComponent(search)}`
+    );
+  }
+
   async getPlanetsList(page: number = 1): Promise<ListResponse<Planet> | null> {
     return this.makeRequest<ListResponse<Planet>>(`/planets/?page=${page}`);
   }
 
   async getPlanet(id: number): Promise<Planet | null> {
     return this.makeRequest<Planet>(`/planets/${id}`);
+  }
+
+  async searchVehiclesList(
+    search: string
+  ): Promise<ListResponse<Vehicle> | null> {
+    return this.makeRequest<ListResponse<Vehicle>>(
+      `/vehicles/?search=${encodeURIComponent(search)}`
+    );
   }
 
   async getVehiclesList(
@@ -65,6 +89,14 @@ export class SwapyApiService {
     return this.makeRequest<Vehicle>(`/vehicles/${id}`);
   }
 
+  async searchStarshipsList(
+    search: string
+  ): Promise<ListResponse<Starship> | null> {
+    return this.makeRequest<ListResponse<Starship>>(
+      `/starships/?search=${encodeURIComponent(search)}`
+    );
+  }
+
   async getStarshipsList(
     page: number = 1
   ): Promise<ListResponse<Starship> | null> {
@@ -75,6 +107,12 @@ export class SwapyApiService {
     return this.makeRequest<Starship>(`/starships/${id}`);
   }
 
+  async searchSpeciesList(search: string): Promise<ListResponse<Species> | null> {
+    return this.makeRequest<ListResponse<Species>>(
+      `/species/?search=${encodeURIComponent(search)}`
+    );
+  }
+
   async getSpeciesList(
     page: number = 1
   ): Promise<ListResponse<Species> | null> {
@@ -83,6 +121,12 @@ export class SwapyApiService {
 
   async getSpecies(id: number): Promise<Species | null> {
     return this.makeRequest<Species>(`/species/${id}`);
+  }
+
+  async searchFilmsList(search: string): Promise<ListResponse<Film> | null> {
+    return this.makeRequest<ListResponse<Film>>(
+      `/films/?search=${encodeURIComponent(search)}`
+    );
   }
 
   async getFilmsList(page: number = 1): Promise<ListResponse<Film> | null> {

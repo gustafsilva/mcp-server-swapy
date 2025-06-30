@@ -358,4 +358,70 @@ export class SwapyService {
     }
     return this.formatFilmList(filmList);
   }
+
+  async searchPeopleList(search: string): Promise<string> {
+    const peopleList = await this.apiService.searchPeopleList(search);
+    if (!peopleList) {
+      return `Failed to retrieve people list for search "${search}"`;
+    }
+    if (peopleList.results.length === 0) {
+      return `No people found for search "${search}"`;
+    }
+    return this.formatPeopleList(peopleList);
+  }
+
+  async searchPlanetsList(search: string): Promise<string> {
+    const planetList = await this.apiService.searchPlanetsList(search);
+    if (!planetList) {
+      return `Failed to retrieve planets list for search "${search}"`;
+    }
+    if (planetList.results.length === 0) {
+      return `No planets found for search "${search}"`;
+    }
+    return this.formatPlanetList(planetList);
+  }
+
+  async searchVehiclesList(search: string): Promise<string> {
+    const vehicleList = await this.apiService.searchVehiclesList(search);
+    if (!vehicleList) {
+      return `Failed to retrieve vehicles list for search "${search}"`;
+    }
+    if (vehicleList.results.length === 0) {
+      return `No vehicles found for search "${search}"`;
+    }
+    return this.formatVehicleList(vehicleList);
+  }
+
+  async searchStarshipsList(search: string): Promise<string> {
+    const starshipList = await this.apiService.searchStarshipsList(search);
+    if (!starshipList) {
+      return `Failed to retrieve starships list for search "${search}"`;
+    }
+    if (starshipList.results.length === 0) {
+      return `No starships found for search "${search}"`;
+    }
+    return this.formatStarshipList(starshipList);
+  }
+
+  async searchSpeciesList(search: string): Promise<string> {
+    const speciesList = await this.apiService.searchSpeciesList(search);
+    if (!speciesList) {
+      return `Failed to retrieve species list for search "${search}"`;
+    }
+    if (speciesList.results.length === 0) {
+      return `No species found for search "${search}"`;
+    }
+    return this.formatSpeciesList(speciesList);
+  }
+
+  async searchFilmsList(search: string): Promise<string> {
+    const filmList = await this.apiService.searchFilmsList(search);
+    if (!filmList) {
+      return `Failed to retrieve films list for search "${search}"`;
+    }
+    if (filmList.results.length === 0) {
+      return `No films found for search "${search}"`;
+    }
+    return this.formatFilmList(filmList);
+  }
 }

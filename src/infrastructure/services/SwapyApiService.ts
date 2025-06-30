@@ -1,4 +1,13 @@
-import { People, PeopleListResponse, Planet, PlanetListResponse, RootResponse } from "../../domain/models/Swapy.js";
+import {
+  Film,
+  ListResponse,
+  People,
+  Planet,
+  RootResponse,
+  Species,
+  Starship,
+  Vehicle,
+} from "../../domain/models/Swapy.js";
 
 export class SwapyApiService {
   private readonly API_BASE = "https://swapi.bry.com.br/api";
@@ -27,8 +36,10 @@ export class SwapyApiService {
     return this.makeRequest<RootResponse>("/");
   }
 
-  async getPeopleList(page: number = 1): Promise<PeopleListResponse | null> {
-    const response = await this.makeRequest<PeopleListResponse>(`/people/?page=${page}`);
+  async getPeopleList(page: number = 1): Promise<ListResponse<People> | null> {
+    const response = await this.makeRequest<ListResponse<People>>(
+      `/people/?page=${page}`
+    );
     return response;
   }
 
@@ -36,20 +47,49 @@ export class SwapyApiService {
     return this.makeRequest<People>(`/people/${id}`);
   }
 
-  async getPlanetsList(page: number = 1): Promise<PlanetListResponse | null> {
-    return this.makeRequest<PlanetListResponse>(`/planets/?page=${page}`);
+  async getPlanetsList(page: number = 1): Promise<ListResponse<Planet> | null> {
+    return this.makeRequest<ListResponse<Planet>>(`/planets/?page=${page}`);
   }
 
   async getPlanet(id: number): Promise<Planet | null> {
     return this.makeRequest<Planet>(`/planets/${id}`);
   }
-  // async getSpecies(id: number): Promise<any | null> {
-  //   return this.makeRequest<any>(`/species/${id}`);
-  // }
-  // async getStarships(id: number): Promise<any | null> {
-  //   return this.makeRequest<any>(`/starships/${id}`);
-  // }
-  // async getVehicles(id: number): Promise<any | null> {
-  //   return this.makeRequest<any>(`/vehicles/${id}`);
-  // }
+
+  async getVehiclesList(
+    page: number = 1
+  ): Promise<ListResponse<Vehicle> | null> {
+    return this.makeRequest<ListResponse<Vehicle>>(`/vehicles/?page=${page}`);
+  }
+
+  async getVehicle(id: number): Promise<Vehicle | null> {
+    return this.makeRequest<Vehicle>(`/vehicles/${id}`);
+  }
+
+  async getStarshipsList(
+    page: number = 1
+  ): Promise<ListResponse<Starship> | null> {
+    return this.makeRequest<ListResponse<Starship>>(`/starships/?page=${page}`);
+  }
+
+  async getStarship(id: number): Promise<Starship | null> {
+    return this.makeRequest<Starship>(`/starships/${id}`);
+  }
+
+  async getSpeciesList(
+    page: number = 1
+  ): Promise<ListResponse<Species> | null> {
+    return this.makeRequest<ListResponse<Species>>(`/species/?page=${page}`);
+  }
+
+  async getSpecies(id: number): Promise<Species | null> {
+    return this.makeRequest<Species>(`/species/${id}`);
+  }
+
+  async getFilmsList(page: number = 1): Promise<ListResponse<Film> | null> {
+    return this.makeRequest<ListResponse<Film>>(`/films/?page=${page}`);
+  }
+
+  async getFilm(id: number): Promise<Film | null> {
+    return this.makeRequest<Film>(`/films/${id}`);
+  }
 }

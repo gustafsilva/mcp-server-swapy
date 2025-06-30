@@ -5,7 +5,6 @@ import { SwapyService } from "./application/services/SwapyService.js";
 import { SwapyApiService } from "./infrastructure/services/SwapyApiService.js";
 
 async function main() {
-  // Criação da instância do servidor MCP
   const server = new McpServer({
     name: "weather",
     version: "1.0.0",
@@ -15,14 +14,11 @@ async function main() {
     },
   });
 
-  // Inicializando serviços e controladores
   const swapyApiService = new SwapyApiService();
   const swapyService = new SwapyService(swapyApiService);
 
-  // Controlador que registra as ferramentas
   new SwapyToolsController(server, swapyService);
 
-  // Configurando e iniciando o servidor
   const transport = new StdioServerTransport();
   await server.connect(transport);
   console.error("Swapy MCP Server running on stdio");

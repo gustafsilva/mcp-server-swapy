@@ -1,8 +1,8 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
-import { NWSApiService } from "./infrastructure/services/NWSApiService.js";
-import { WeatherService } from "./application/services/WeatherService.js";
-import { WeatherToolsController } from "./interface/controllers/WeatherToolsController.js";
+import { SwapyToolsController } from "./interface/controllers/SwapyToolsController.js";
+import { SwapyService } from "./application/services/SwapyService.js";
+import { SwapyApiService } from "./infrastructure/services/SwapyApiService.js";
 
 async function main() {
   // Criação da instância do servidor MCP
@@ -16,16 +16,16 @@ async function main() {
   });
 
   // Inicializando serviços e controladores
-  const nwsApiService = new NWSApiService();
-  const weatherService = new WeatherService(nwsApiService);
+  const swapyApiService = new SwapyApiService();
+  const swapyService = new SwapyService(swapyApiService);
 
   // Controlador que registra as ferramentas
-  new WeatherToolsController(server, weatherService);
+  new SwapyToolsController(server, swapyService);
 
   // Configurando e iniciando o servidor
   const transport = new StdioServerTransport();
   await server.connect(transport);
-  console.error("Weather MCP Server running on stdio");
+  console.error("Swapy MCP Server running on stdio");
 }
 
 main().catch((error) => {

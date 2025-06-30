@@ -1,82 +1,111 @@
-# Exemplo de Servidor MCP
+# MCP Server - Star Wars API ![Yarn](https://img.shields.io/badge/yarn-active-blue?logo=yarn) ![License](https://img.shields.io/badge/license-ISC-green)
 
-Criado para fins educacionais no canal Código Fonte TV, este projeto demonstra como construir um servidor MCP com integração a APIs externas e validação de dados.
+Servidor MCP (Model Context Protocol) para consultas ao universo Star Wars via [SWAPI](https://swapi.bry.com.br/documentation). Ideal para integrações, estudos e demonstrações de arquitetura em camadas com Node.js/TypeScript.
 
-Este repositório contém um exemplo de implementação de um servidor MCP (_Model Context Protocol_) em Node.js/TypeScript, que fornece duas ferramentas para obter informações meteorológicas usando a API do National Weather Service (NWS) dos EUA.
+## Sumário
+- [MCP Server - Star Wars API  ](#mcp-server---star-wars-api--)
+  - [Sumário](#sumário)
+  - [Sobre o Projeto](#sobre-o-projeto)
+  - [Pré-requisitos](#pré-requisitos)
+  - [Como executar](#como-executar)
+  - [Scripts disponíveis](#scripts-disponíveis)
+  - [Sobre a SWAPI](#sobre-a-swapi)
+    - [Exemplos de uso da API](#exemplos-de-uso-da-api)
+  - [Contribuição](#contribuição)
+  - [Licença](#licença)
+  - [Créditos](#créditos)
 
-## Funcionalidades
+## Sobre o Projeto
 
-- **get-alerts**: Retorna alertas meteorológicos ativos para um estado (código de duas letras, ex: `CA`, `NY`).
-- **get-forecast**: Retorna a previsão do tempo para coordenadas geográficas (latitude, longitude).
-- Validação de entrada usando [Zod](https://github.com/colinhacks/zod).
-- Integração com a API do NWS usando `fetch` (camada de infraestrutura).
-- Comunicação via _stdio_ usando o protocolo MCP (`@modelcontextprotocol/sdk`).
+- Inspirado no projeto base do canal Código Fonte TV (veja créditos abaixo).
+- Reimplementado para consumir a API pública SWAPI, trazendo informações sobre personagens, filmes, naves, veículos, espécies e planetas do universo Star Wars.
+- Desenvolvido em Node.js/TypeScript, seguindo arquitetura em camadas (DDD):
+  - **Domain**: Modelos de domínio.
+  - **Infrastructure**: Serviços de integração com a SWAPI.
+  - **Application**: Lógica de negócio e formatação dos dados.
+  - **Interface**: Controladores MCP e validação de entrada.
+  - **main.ts**: Ponto de entrada do servidor MCP.
 
-## Arquitetura
+## Pré-requisitos
 
-O projeto segue uma arquitetura em camadas inspirada em padrões de **Domain-Driven Design** (DDD):
+- [Node.js](https://nodejs.org/) (>= 18)
+- [Yarn](https://yarnpkg.com/)
 
-- **Domain** (`src/domain`):
-  Definição de interfaces e tipos que representam as estruturas de dados (ex: `AlertFeature`, `ForecastPeriod`, `AlertsResponse`).
+## Como executar
 
-- **Infrastructure** (`src/infrastructure`):
-  Implementação de serviços externos, como o `NWSApiService`, responsável por realizar as chamadas HTTP à API do NWS.
+1. Instale as dependências:
+   ```bash
+   yarn install
+   ```
+2. Faça o build do projeto:
+   ```bash
+   yarn build
+   ```
+3. Configure o `client` para se comunicar com mcp-server, mais informações, [clique aqui](https://modelcontextprotocol.io/quickstart/server#node).
 
-- **Application** (`src/application`):
-  Contém a lógica de negócio no `WeatherService`, que processa e formata os dados vindos da infraestrutura.
+O servidor ficará disponível via stdio, pronto para receber requisições MCP.
 
-- **Interface** (`src/interface`):
-  Inclui controladores (`WeatherToolsController`) que registram as ferramentas no servidor MCP, definem schemas de validação e retornam os resultados.
+## Scripts disponíveis
 
-- **Entry Point** (`src/main.ts`):
-  Inicializa o `McpServer`, configura o transporte (`StdioServerTransport`), instancia serviços e controladores, e inicia escuta em _stdio_.
+Os principais scripts configurados no `package.json` para uso com Yarn são:
 
-A estrutura de pastas é a seguinte:
+- `yarn build`: Compila o projeto TypeScript para JavaScript na pasta `build/`.
+- `yarn test`: Executa os testes automatizados com Jest.
 
-```
-src/
-├── domain/
-│   └── models/           # Interfaces de domínio
-├── infrastructure/
-│   └── services/         # Implementações da API externa (NWS)
-├── application/
-│   └── services/         # Lógica de negócio e formatação de dados
-├── interface/
-│   └── controllers/      # Registro das ferramentas MCP e validação
-└── main.ts               # Ponto de entrada do servidor
-build/                     # Código JavaScript compilado
-```
-
-## Instalação
-
-```bash
-git clone <REPOSITÓRIO_URL>
-cd mcp-server-sample
-npm install
-npm run build
-```
-
-## Uso
-
-Após o build, você pode executar o servidor diretamente:
+Você pode rodar os scripts assim:
 
 ```bash
-node build/main.js
+yarn build   # Compila o projeto
+yarn test    # Executa os testes
 ```
 
-Ou, se registrado como binário (`weather`):
+## Sobre a SWAPI
 
-```bash
-npm link
-weather
-```
+A [SWAPI](https://swapi.bry.com.br/documentation) é uma API REST aberta, sem autenticação, que fornece dados do universo Star Wars. Principais recursos disponíveis:
 
-O servidor iniciará na saída padrão (_stdio_) e aguardará requisições MCP.
+- **People** (`/people/`): Personagens icônicos como Luke Skywalker, Darth Vader, etc.
+- **Films** (`/films/`): Informações sobre os filmes da saga.
+- **Starships** (`/starships/`): Naves espaciais.
+- **Vehicles** (`/vehicles/`): Veículos terrestres e aéreos.
+- **Species** (`/species/`): Espécies do universo Star Wars.
+- **Planets** (`/planets/`): Planetas famosos como Tatooine, Hoth, Naboo, etc.
+
+### Exemplos de uso da API
+
+- Buscar um personagem:
+  ```bash
+  curl https://swapi.bry.com.br/api/people/1/
+  # Retorna dados de Luke Skywalker
+  ```
+- Buscar um planeta:
+  ```bash
+  curl https://swapi.bry.com.br/api/planets/1/
+  # Retorna dados de Tatooine
+  ```
+- Buscar por nome:
+  ```bash
+  curl "https://swapi.bry.com.br/api/people/?search=leia"
+  # Busca personagens com nome contendo 'leia'
+  ```
 
 ## Contribuição
 
-Pull requests são bem-vindos! Sinta-se à vontade para abrir issues e discutir melhorias.
+Contribuições são bem-vindas! Para contribuir:
+- Faça um fork do projeto
+- Crie uma branch com sua feature ou correção
+- Envie um pull request
+- Abra issues para sugestões ou bugs
 
-## Código Fonte TV
+## Licença
 
-Para mais detalhes sobre a implementação, assista ao vídeo no canal [Código Fonte TV](https://youtu.be/NUOzYPSNaNk).
+Distribuído sob a licença ISC. Veja o arquivo LICENSE para mais detalhes.
+
+## Créditos
+
+Este projeto foi baseado no exemplo do canal [Código Fonte TV](https://youtu.be/NUOzYPSNaNk), adaptado para consumir a SWAPI.
+
+Para mais detalhes sobre a SWAPI, acesse a [documentação oficial](https://swapi.bry.com.br/documentation).
+
+---
+
+> Feito com ☕ por Gustavo Freitas. Dúvidas ou sugestões: [LinkedIn](https://www.linkedin.com/in/gustafsilva/)
